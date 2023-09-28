@@ -1,15 +1,6 @@
 import React, { useState } from "react";
 import "./index.css";
-import {
-  StyledHeader,
-  StyledTurn,
-  StyledReset,
-  StyledFotter,
-  StyledTable,
-  StyledContainer,
-  StyledSquares,
-  StyledTurnItem,
-} from "./Styles";
+import { StyledTurn } from "./Styles";
 
 const WINING_PATTERNS = [
   [0, 1, 2],
@@ -84,39 +75,40 @@ export const App = () => {
   return (
     // react fragmentの短縮技法<></>
     <>
-      <StyledContainer>
+      <div className="l-container">
         <main>
-          <StyledHeader>
+          <div className="header">
             <p>TIC TAC TOE</p>
-          </StyledHeader>
-          <StyledTurn>
-            <StyledTurnItem active={circleTurn}>○</StyledTurnItem>{" "}
-            {/*circleTurnがtrue = ◯の場合処理*/}
-            <StyledTurnItem active={!circleTurn}>☓</StyledTurnItem>{" "}
-            {/*circleTurnがfalse = ☓の場合、trueに設定して、activeに渡す　*/}
-          </StyledTurn>
-          <StyledTable>
+          </div>
+          <div className="turn">
+            <div className={`turn-item ${circleTurn ? "active" : ""}`}>○</div>
+            <div className={`turn-item ${circleTurn ? "" : "active"}`}>☓</div>
+          </div>
+          <div className="table">
             {games.map((board, index) => {
               return (
-                <StyledSquares
+                <button
                   key={index}
+                  className="squares"
                   onClick={() => {
                     onClickButton(index);
                   }}
                 >
                   {board}
-                </StyledSquares>
+                </button>
               );
             })}
-          </StyledTable>
-          <StyledFotter>
-            <div>
+          </div>
+          <div className="footer">
+            <div className="state">
               <p>{displayStatus}</p>
             </div>
-            <StyledReset onClick={onClickReset}>RESTART</StyledReset>
-          </StyledFotter>
+            <button className="reset" onClick={onClickReset}>
+              RESTART
+            </button>
+          </div>
         </main>
-      </StyledContainer>
+      </div>
     </>
   );
 };
