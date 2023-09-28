@@ -18,8 +18,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build",
-    "homepage": "https://masuzuki1028.github.io/ws-0400-react-tic-tac-toe"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -41,5 +40,6 @@
   },
   "devDependencies": {
     "gh-pages": "^6.0.0"
-  }
+  },
+  "homepage": "https://masuzuki1028.github.io/ws-0400-react-tic-tac-toe"
 }
