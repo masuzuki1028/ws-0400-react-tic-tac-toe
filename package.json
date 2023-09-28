@@ -19,7 +19,7 @@
     "eject": "react-scripts eject",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
-    "homepage": "https://masuzuki1028.github.io//ws-0400-react-tic-tac-toe"
+    "homepage": "https://masuzuki1028.github.io/ws-0400-react-tic-tac-toe"
   },
   "eslintConfig": {
     "extends": [
