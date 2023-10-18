@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./index.css";
 import {
   StyledHeader,
   StyledTurn,
@@ -28,95 +27,82 @@ const STATUS = {
   draw: "draw",
 };
 
+function checkWinner(newcells) {
+  return WINING_PATTERNS.some((pattern) => {
+    const [first, second, third] = pattern.map((index) => newcells[index]);
+    return first && first === second && first === third;
+  });
+}
+
 export const App = () => {
-  const [games, setGames] = useState(new Array(9).fill("")); //要素9で空のリスト作成
-  const [drawCount, setdrawCount] = useState(1); //初期値を1に設定
-  const [circleTurn, setcircleTurn] = useState(true); //初期値をtrueにセット
-  // const [displayTurn, setDisplayTurn] = useState("◯"); //初期値を◯にセット
-  const [displayStatus, setdisplayStatus] = useState(STATUS.stating); //初期値をstartingにセット
+  const [cells, setCells] = useState(new Array(9).fill("")); //要素9で空のリスト作成
+  const [drawCount, setDrawCount] = useState(1); //初期値を1に設定
+  const [circleTurn, setCircleTurn] = useState(true); //初期値をtrueにセット
+  const [displayStatus, setDisplayStatus] = useState(STATUS.stating); //初期値をstartingにセット
 
   const onClickButton = (index) => {
-    if (games[index] !== "") {
+    if (cells[index]) {
       return;
     } //gameのインデックスが空ではない場合returnで抜ける
     if (displayStatus === STATUS.win) {
       return;
     } // STATUSがwinの場合ゲームが完了しているので後続処理をスキップする
-    const newGames = [...games]; //配列gamesの情報をスプレッド構文コピー
-    newGames[index] = circleTurn ? "◯" : "×"; //circleTurnがtrueなら◯ falseなら✗にセット
-    setcircleTurn(!circleTurn); //circleTurnをtrue→false/ false→ trueにセットして、今回と異なる判定になるように変更
-    setGames(newGames); //gamesを更新
-    // const nextTurn = circleTurn ? "◯" : "×";
-    // setDisplayTurn(nextTurn);
+    const newcells = [...cells]; //配列cellsの情報をスプレッド構文コピー
+    newcells[index] = circleTurn ? "◯" : "×"; //circleTurnがtrueなら◯ falseなら✗にセット
+    setCircleTurn(!circleTurn); //circleTurnをtrue→false/ false→ trueにセットして、今回と異なる判定になるように変更
+    setCells(newcells); //cellsを更新
 
-    for (let i = 0; i < WINING_PATTERNS.length; i++) {
-      const first = newGames[WINING_PATTERNS[i][0]];
-      const second = newGames[WINING_PATTERNS[i][1]];
-      const third = newGames[WINING_PATTERNS[i][2]];
-
-      if (
-        first &&
-        first === second &&
-        first === third // A/B A/Cがイコールであれば。Aが空の場合もあるため後続処理で判定
-      ) {
-        if (first !== "") {
-          // setDisplayTurn(`${circleTurn === true ? "◯" : "×"}の勝ち`);
-          setdisplayStatus(STATUS.win);
-          return;
-        }
-      }
+    const isWinner = checkWinner(newcells);
+    if (isWinner) {
+      setDisplayStatus(STATUS.win);
+      return;
     }
-    setdrawCount(drawCount + 1);
+
+    setDrawCount(drawCount + 1);
     if (drawCount === 9) {
-      setdisplayStatus(STATUS.draw);
+      setDisplayStatus(STATUS.draw);
       return;
     }
   };
 
   const onClickReset = () => {
-    setGames(new Array(9).fill("")); //games初期化
-    setcircleTurn(true); //circleTurn初期化
-    // setDisplayTurn("◯"); //displayTurn初期化
-    setdrawCount(1); //setdrawCount初期値に設定
-    setdisplayStatus(STATUS.stating);
+    setCells(new Array(9).fill("")); //cells初期化
+    setCircleTurn(true); //circleTurn初期化
+    setDrawCount(1); //setdrawCount初期値に設定
+    setDisplayStatus(STATUS.stating);
   };
 
   return (
-    // react fragmentの短縮技法<></>
-    <>
-      <StyledContainer>
-        <main>
-          <StyledHeader>
-            <p>TIC TAC TOE</p>
-          </StyledHeader>
-          <StyledTurn>
-            <StyledTurnItem active={circleTurn}>○</StyledTurnItem>{" "}
-            {/*circleTurnがtrue = ◯の場合処理*/}
-            <StyledTurnItem active={!circleTurn}>☓</StyledTurnItem>{" "}
-            {/*circleTurnがfalse = ☓の場合、trueに設定して、activeに渡す　*/}
-          </StyledTurn>
-          <StyledTable>
-            {games.map((board, index) => {
-              return (
-                <StyledSquares
-                  key={index}
-                  onClick={() => {
-                    onClickButton(index);
-                  }}
-                >
-                  {board}
-                </StyledSquares>
-              );
-            })}
-          </StyledTable>
-          <StyledFotter>
-            <div>
-              <p>{displayStatus}</p>
-            </div>
-            <StyledReset onClick={onClickReset}>RESTART</StyledReset>
-          </StyledFotter>
-        </main>
-      </StyledContainer>
-    </>
+    <StyledContainer>
+      <main>
+        <StyledHeader>
+          <p>TIC TAC TOE</p>
+        </StyledHeader>
+        <StyledTurn>
+          <StyledTurnItem active={circleTurn}>○</StyledTurnItem>{" "}
+          <StyledTurnItem active={!circleTurn}>☓</StyledTurnItem>{" "}
+        </StyledTurn>
+        <StyledTable>
+          {cells.map((board, index) => {
+            return (
+              <StyledSquares
+                key={index}
+                onClick={() => {
+                  onClickButton(index);
+                }}
+              >
+                {board}
+              </StyledSquares>
+            );
+          })}
+        </StyledTable>
+        <StyledFotter>
+          <div>
+            <p>{displayStatus}</p>
+          </div>
+          <StyledReset onClick={onClickReset}>RESTART</StyledReset>
+        </StyledFotter>
+      </main>
+    </StyledContainer>
   );
 };
